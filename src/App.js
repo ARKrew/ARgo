@@ -1,34 +1,15 @@
 import React, { Component } from 'react';
+import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import firebase from 'firebase';
-// Middleware
 import ReduxThunk from 'redux-thunk';
-import { 
-  FIREBASE_apiKey, 
-  FIREBASE_authDomain, 
-  FIREBASE_databaseURL, 
-  FIREBASE_projectId,
-  FIREBASE_storageBucket,
-  FIREBASE_messagingSenderId
-} from 'react-native-dotenv';
+import { createStore, applyMiddleware } from 'redux';
+import AppNavigator from './AppNavigator';
+// import firebase from 'firebase';
+// Middleware
 import reducers from './reducers';
-import LoginForm from './components/LoginForm';
 
 class App extends Component {
-  // Lifecycle method that will intialize as soon as app loads
-  componentWillMount() {
-    const config = {
-      apiKey: FIREBASE_apiKey,
-      authDomain: FIREBASE_authDomain,
-      databaseURL: FIREBASE_databaseURL,
-      projectId: FIREBASE_projectId,
-      storageBucket: FIREBASE_storageBucket,
-      messagingSenderId: FIREBASE_messagingSenderId
-    };
-    firebase.initializeApp(config);
-  }
-  
+
   render() {
     // Wire up redux-thunk
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
@@ -37,10 +18,10 @@ class App extends Component {
       // STORE
       // Pass reducers through createStore call
       <Provider store={store}>
-        <LoginForm />
+        <AppNavigator />
       </Provider>
     );
   }
 }
 
-export default App;
+AppRegistry.registerComponent('ARgo', () => App);
