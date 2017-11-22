@@ -3,7 +3,7 @@ import { View, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import FBSDK, { AccessToken, LoginManager } from 'react-native-fbsdk';
-import loginSuccess from '../../actions/AuthActions';
+import { loginSuccess } from '../../actions/AuthActions';
 
 const config = {
   apiKey: 'AIzaSyCUGO1U43_sMeTlVm9nl7ytwcILcrFsjOg',
@@ -47,6 +47,7 @@ class Login extends Component {
                 animating: false,
                 error: null
             });
+            console.log(this.props);
             this.props.loginSuccess(user);
         } catch (error) {
             this.setState({
@@ -81,7 +82,7 @@ class Login extends Component {
                     ) : null
                 }
                 <TouchableOpacity
-                    onPress={this.onLogin}
+                    onPress={this.onLogin.bind(this)}
                     style={{
                         marginTop: 10,
                         padding: 10,

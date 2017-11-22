@@ -9,6 +9,7 @@ export const loginSuccess = (user) => {
         });
         const resetNavigator = NavigationActions.reset({
             index: 0,
+            key: null,
             actions: [
                 NavigationActions.navigate({
                     routeName: 'Authorized',
