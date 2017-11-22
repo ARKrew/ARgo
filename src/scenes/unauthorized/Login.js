@@ -27,22 +27,6 @@ class Login extends Component {
         error: null
     }
 
-    componentDidMount() {
-    this.fireBaseListener = firebase.auth().onAuthStateChanged(auth => {
-      if (auth) {
-        this.firebaseRef = firebase.database().ref('users');
-        this.firebaseRef.child(auth.uid).on('value', snap => {
-          const user = snap.val();
-          if (user != null) {
-            this.firebaseRef.child(auth.uid).off('value');
-             this.goHome(user);
-          }
-        });
-      } else {
-        // this.setState({ showSpinner: false });
-      }
-    });
-  }
 
     onLogin = async () => {
         try {
