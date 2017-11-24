@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
+import { CardSection, Button } from '../common';
 
 class More extends Component {
   static navigationOptions = {
@@ -8,9 +9,13 @@ class More extends Component {
 
   render() {
     return (
-        <View>
-            <Text>More</Text>
-        </View>
+      <View style={{ flex: 1 }}>
+        <CardSection>
+          <Button>
+            Terms of Service
+          </Button>
+        </CardSection>
+      </View>
     );
   }
 }

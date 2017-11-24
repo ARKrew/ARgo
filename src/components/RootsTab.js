@@ -23,16 +23,28 @@ const MoreScreen = () => (
 
 const RootsTab = TabNavigator({
   Profile: {
-    screen: ProfileScreen
+    screen: ProfileScreen,
+    navigationOptions: {
+      title: 'Profile',
+    }
   },
   Map: {
-    screen: MapScreen
+    screen: MapScreen,
+    navigationOptions: {
+      title: 'Map',
+    }
   },
   List: {
-    screen: ListScreen
+    screen: ListScreen,
+    navigationOptions: {
+      title: 'List',
+    }
   },
   More: {
-    screen: MoreScreen
+    screen: MoreScreen,
+    navigationOptions: {
+      title: 'More',
+    }
   }
 });
 
