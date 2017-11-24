@@ -1,35 +1,24 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
 import { TabNavigator } from 'react-navigation';
+import Profile from './screens/Profile';
+import More from './screens/More';
+import Map from './screens/Map';
+import List from './screens/List';
 
 const ProfileScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Jizzys Profile</Text>
-    <Image
-      style={{ width: 350, height: 350 }}
-      source={{
-        uri: 'https://avatars1.githubusercontent.com/u/28130499?v=4&s=400'
-      }}
-    />
-  </View>
+  <Profile />
 );
 
 const MapScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Map</Text>
-  </View>
+  <Map />
 );
 
 const ListScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>List View</Text>
-  </View>
+  <List />
 );
 
 const MoreScreen = () => (
-  <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    <Text>Mas</Text>
-  </View>
+  <More />
 );
 
 const RootsTab = TabNavigator({
