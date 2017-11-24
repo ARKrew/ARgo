@@ -7,7 +7,7 @@ export default (state = routerInitialState, action) => {
     switch (action.type) {
         case LOGIN:
             nextState = router.getStateForAction(
-                NavigationActions.navigate({ routeName: ROUTES.profile }),
+                NavigationActions.navigate({ routeName: ROUTES.rootstab }),
                 state
             );
             break;
