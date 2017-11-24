@@ -1,24 +1,17 @@
-// Make sure import statement is correct
-import { 
-    EMAIL_CHANGED,
-    PASSWORD_CHANGED
-} from '../actions/types';
+import { LOGIN, LOGOUT } from '../actions/types';
 
-// Update as you create new actions
-const INITIAL_STATE = { 
-    email: '', 
-    password: ''
+const INITIAL = {
+    loggedIn: false,
+    user: null
 };
 
-export default(state = INITIAL_STATE, action) => {
+export default (state = INITIAL, action) => {
+    console.log(action);
     switch (action.type) {
-        case EMAIL_CHANGED:
-            // This will return as application's state
-            // Take all properties on state, then use email value to replace state's email
-            // Brand new object is created with ...! Immutable
-            return { ...state, email: action.payload };
-        case PASSWORD_CHANGED:
-            return { ...state, password: action.payload };
+        case LOGIN:
+            return { loggedIn: true, user: action.payload };
+        case LOGOUT:
+            return INITIAL;
         default:
             return state;
     }

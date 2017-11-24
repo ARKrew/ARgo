@@ -1,72 +1,129 @@
 import React, { Component } from 'react';
+import {
+  StyleSheet,
+  View,
+  ActivityIndicator,
+  Button
+} from 'react-native';
+import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
-import { Card, CardSection, Input, Button } from './common';
+import { loginSuccess } from '../actions/AuthActions';
 
-class LoginForm extends Component {
-    
-    // Helper methods
-    onEmailChange(text) {
-        // Access to action creator
-        this.props.emailChanged(text);
-    }
-    
-    onPasswordChange(text) {
-        // Action creator
-        this.props.passwordChanged(text);
-    }
+const FBSDK = require('react-native-fbsdk');
 
-    onButtonPress() {
-        const { email, password } = this.props;
-        this.props.loginUser({ email, password });
-    }    
+const { LoginManager, AccessToken } = FBSDK;
 
-    render() {
-        return (
-            <Card>
-                <CardSection>
-                    <Input 
-                        label="Email"
-                        placeholder="email@gmail.com"
-                        // Because it's a call-back use .bind(this) method
-                        onChangeText={this.onEmailChange.bind(this)}
-                        value={this.props.email}
-                    />
-                </CardSection>
-                
-                <CardSection>
-                    <Input
-                        secureTextEntry
-                        label="Password"
-                        placeholder="password"
-                        // Event handler
-                        onChangeText={this.onPasswordChange.bind(this)}
-                        value={this.props.password}
-                    />
-                </CardSection>
+class Login extends Component {
+  constructor(props) {
+   super(props);
+   this.state = {
+     showSpinner: true,
+    };
+  }
 
-                <CardSection>
-                    <Button onPress={this.onButtonPress.bind(this)}>
-                        Login
-                    </Button>
-                </CardSection>
-            </Card>
+  componentDidMount() {
+    this.fireBaseListener = firebase.auth().onAuthStateChanged(auth => {
+      if (auth) {
+        this.firebaseRef = firebase.database().ref('users');
+        this.firebaseRef.child(auth.uid).on('value', snap => {
+          const user = snap.val();
+          if (user != null) {
+            this.firebaseRef.child(auth.uid).off('value');
+            this.props.loginSuccess(user);
+          }
+        });
+      } else {
+        this.setState({ showSpinner: false });
+      }
+    });
+  }
+
+  onPressLogin() {
+    this.setState({ showSpinner: true })
+        LoginManager.logInWithReadPermissions([
+          'public_profile',
+          'user_birthday',
+          'email',
+          'user_photos'
+        ])
+        .then((result) => this.handleCallBack(result),
+          function(error) {
+            alert('Login fail with error: ' + error);
+          }
+        );
+  }
+
+  handleCallBack(result) {
+    let that = this;
+    if (result.isCancelled) {
+      alert('Login canceled');
+    } else {
+          AccessToken.getCurrentAccessToken().then(
+          (data) => {
+            const token = data.accessToken
+            fetch('https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name&access_token=' + token)
+            .then((response) => response.json())
+            .then((json) => {
+              const imageSize = 120
+              const facebookID = json.id
+              const fbImage = `https://graph.facebook.com/${facebookID}/picture?height=${imageSize}`
+             this.authenticate(data.accessToken)
+              .then(function(result) {
+                const { uid } = result;
+                that.createUser(uid, json, token, fbImage)
+              });
+            })
+            .catch(function(err) {
+              console.log(err);
+            });
+          }
         );
     }
+  }
+
+  authenticate = (token) => {
+    const provider = firebase.auth.FacebookAuthProvider;
+    const credential = provider.credential(token);
+    return firebase.auth().signInWithCredential(credential);
+  }
+
+  createUser = (uid, userData, token, dp) => {
+    const defaults = {
+      uid,
+      token,
+      dp
+    };
+    firebase.database().ref('users').child(uid).update({ ...userData, ...defaults });
+  }
+  render() {
+    return (
+      this.state.showSpinner ? <View style={styles.container}><ActivityIndicator animating={this.state.showSpinner} /></View> :
+      <View style={styles.container}>
+          <Button
+            onPress={this.onPressLogin.bind(this)}
+            title="Login with Facebook"
+            color="#841584"
+          />
+      </View>
+    );
+  }
 }
 
-// RECAP: Ability to interface from application levle state down to component level
-// RECAP: Pluck properties off state object and inject into components
-// Whenver application state changes, mapstatetoprops function will rerun and causes component to rerender
-const mapStateToProps = state => {
-    return {
-        // auth because defined in index.js reducer file
-        email: state.auth.email,
-        password: state.auth.password
-    };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  }
+});
+
+const mapStateToProps = (state) => {
+  console.log('mapStateToProps', state);
+  return {
+    logged: state.auth.loggedIn,
+    user: state.auth.user
+  };
 };
 
-// Wire up action creator
-export default connect(mapStateToProps, { 
-    emailChanged, passwordChanged, loginUser 
-})(LoginForm);
+export default connect(mapStateToProps, { loginSuccess })(Login);

@@ -1,46 +1,78 @@
+// import React, { Component } from 'react';
+// import { AppRegistry } from 'react-native';
+// import { Provider } from 'react-redux';
+// import ReduxThunk from 'redux-thunk';
+// import { createStore, applyMiddleware } from 'redux';
+// import AppNavigator from './AppNavigator';
+// // import firebase from 'firebase';
+// // Middleware
+// import reducers from './reducers';
+//
+// class App extends Component {
+//
+//   render() {
+//     // Wire up redux-thunk
+//     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+//
+//     return (
+//       // STORE
+//       // Pass reducers through createStore call
+//       <Provider store={store}>
+//         <AppNavigator />
+//       </Provider>
+//     );
+//   }
+// }
+//
+// AppRegistry.registerComponent('ARgo', () => App);
+
 import React, { Component } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+// import firebase from 'firebase';
 import firebase from 'firebase';
-// Middleware
 import ReduxThunk from 'redux-thunk';
-import { 
-  FIREBASE_apiKey, 
-  FIREBASE_authDomain, 
-  FIREBASE_databaseURL, 
-  FIREBASE_projectId,
-  FIREBASE_storageBucket,
-  FIREBASE_messagingSenderId
-} from 'react-native-dotenv';
+import { addNavigationHelpers } from 'react-navigation';
 import reducers from './reducers';
-import LoginForm from './components/LoginForm';
+import { AppNavigator } from './AppNavigator';
 
-class App extends Component {
-  // Lifecycle method that will intialize as soon as app loads
+const App = ({ dispatch, nav }) => (
+    <AppNavigator
+        screenProps={{ headerStyle: styles.headerStyle }}
+        navigation={addNavigationHelpers({ dispatch, state: nav })}
+    />
+);
+
+const AppWithNavigationState = connect(() => ({ nav }) => ({ nav }))(App);
+const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+
+class NavigationalApp extends Component {
   componentWillMount() {
-    const config = {
-      apiKey: FIREBASE_apiKey,
-      authDomain: FIREBASE_authDomain,
-      databaseURL: FIREBASE_databaseURL,
-      projectId: FIREBASE_projectId,
-      storageBucket: FIREBASE_storageBucket,
-      messagingSenderId: FIREBASE_messagingSenderId
+    const firebaseConfig = {
+      apiKey: 'AIzaSyCUGO1U43_sMeTlVm9nl7ytwcILcrFsjOg',
+      authDomain: 'argo-4cbff.firebaseapp.com',
+      databaseURL: 'https://argo-4cbff.firebaseio.com',
+      projectId: 'argo-4cbff',
+      storageBucket: 'argo-4cbff.appspot.com',
+      messagingSenderId: '246167725320'
     };
-    firebase.initializeApp(config);
-  }
-  
-  render() {
-    // Wire up redux-thunk
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  render() {
     return (
-      // STORE
-      // Pass reducers through createStore call
       <Provider store={store}>
-        <LoginForm />
+        <AppWithNavigationState />
       </Provider>
     );
   }
 }
 
-export default App;
+const styles = {
+    headerStyle: {
+        backgroundColor: '#fff',
+    },
+};
+
+export default NavigationalApp;
