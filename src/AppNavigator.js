@@ -1,6 +1,5 @@
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 import LoginForm from './components/LoginForm';
-import Profile from './components/Profile';
 import RootsTab from './components/RootsTab';
 
 export const ROUTES = {
@@ -16,10 +15,6 @@ export const AppNavigator = StackNavigator({
         backgroundColor: '#fff'
     },
 });
-
-// export const TabNavigator = TabNavigator({ 
-
-// })
 
 export const { router } = AppNavigator;
 export const routerInitialState = router.getStateForAction(
