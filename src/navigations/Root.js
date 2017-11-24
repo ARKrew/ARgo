@@ -1,8 +1,8 @@
 import { StackNavigator } from 'react-navigation';
-import Login from '../scenes/unauthorized/Login';
+import LoginForm from '../components/LoginForm';
 
 const Root = StackNavigator({
-    Unauthorized: { screen: Login }
+    Login: { screen: LoginForm }
 }, {
         headerMode: 'screen',
         navigationOptions: {

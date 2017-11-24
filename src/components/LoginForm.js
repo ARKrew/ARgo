@@ -7,13 +7,13 @@ import {
 } from 'react-native';
 import firebase from 'firebase';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
+import { loginSuccess } from '../actions/AuthActions';
 
 const FBSDK = require('react-native-fbsdk');
 
 const { LoginManager, AccessToken } = FBSDK;
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
    super(props);
    this.state = {
@@ -29,7 +29,7 @@ export default class Login extends Component {
           const user = snap.val();
           if (user != null) {
             this.firebaseRef.child(auth.uid).off('value');
-             this.goHome(user);
+            // this.props.loginSuccess(user);
           }
         });
       } else {
@@ -51,16 +51,6 @@ export default class Login extends Component {
             alert('Login fail with error: ' + error);
           }
         );
-  }
-
-  goHome(user) {
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Home', params: { user } }),
-      ],
-    });
-    this.props.navigation.dispatch(resetAction);
   }
 
   handleCallBack(result) {
@@ -127,3 +117,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   }
 });
+
+const mapStateToProps = (state) => {
+  console.log('mapStateToProps', state);
+  return {
+    logged: state.auth.loggedIn,
+    user: state.auth.user
+  };
+};
+
+export default connect(mapStateToProps, { loginSuccess })(Login);

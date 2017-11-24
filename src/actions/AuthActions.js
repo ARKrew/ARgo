@@ -1,5 +1,5 @@
 import { NavigationActions } from 'react-navigation';
-import { LOGIN, LOGOUT } from './types';
+import { LOGIN } from './types';
 
 export const loginSuccess = (user) => {
     return (dispatch) => {
@@ -7,32 +7,34 @@ export const loginSuccess = (user) => {
             type: LOGIN,
             payload: user
         });
-        const resetNavigator = NavigationActions.reset({
-            index: 0,
-            key: null,
-            actions: [
-                NavigationActions.navigate({
-                    routeName: 'Authorized',
-                })
-            ],
-        });
-        dispatch(resetNavigator);
+        console.log(dispatch);
+        // const resetAction = NavigationActions.reset({
+        //   index: 0,
+        //   key: null,
+        //   actions: [
+        //     NavigationActions.navigate({
+        //       routeName: 'Profile',
+        //       params: { user }
+        //     }),
+        //   ],
+        // });
+        // dispatch(resetAction);
     };
 };
 
-export const logout = () => {
-    return (dispatch) => {
-        dispatch({
-            type: LOGOUT,
-        });
-        const resetNavigator = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate({
-                    routeName: 'Unauthorized',
-                })
-            ],
-        });
-        dispatch(resetNavigator);
-    };
-};
+// export const logout = () => {
+//     return (dispatch) => {
+//         dispatch({
+//             type: LOGOUT,
+//         });
+//         const resetNavigator = NavigationActions.reset({
+//             index: 0,
+//             actions: [
+//                 NavigationActions.navigate({
+//                     routeName: 'Unauthorized',
+//                 })
+//             ],
+//         });
+//         dispatch(resetNavigator);
+//     };
+// };
