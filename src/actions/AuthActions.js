@@ -1,24 +1,13 @@
 import { NavigationActions } from 'react-navigation';
 import { LOGIN } from './types';
 
-export const loginSuccess = (user) => {
+export const loginSuccess = ({ user }) => {
     return (dispatch) => {
         dispatch({
             type: LOGIN,
             payload: user
         });
         console.log(dispatch);
-        // const resetAction = NavigationActions.reset({
-        //   index: 0,
-        //   key: null,
-        //   actions: [
-        //     NavigationActions.navigate({
-        //       routeName: 'Profile',
-        //       params: { user }
-        //     }),
-        //   ],
-        // });
-        // dispatch(resetAction);
     };
 };
 

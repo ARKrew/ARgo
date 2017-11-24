@@ -8,11 +8,12 @@ class Profile extends Component {
 
     render() {
         return (
-            <View style={{
+            <View
+            style={{
                 flex: 1,
                 justifyContent: 'center',
-                alignItems: 'center',
-            }}>
+                alignItems: 'center'
+              }}>
                 <Text>Profile</Text>
             </View>
         );

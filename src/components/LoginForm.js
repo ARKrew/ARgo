@@ -29,7 +29,7 @@ class Login extends Component {
           const user = snap.val();
           if (user != null) {
             this.firebaseRef.child(auth.uid).off('value');
-            // this.props.loginSuccess(user);
+            this.props.loginSuccess(user);
           }
         });
       } else {
