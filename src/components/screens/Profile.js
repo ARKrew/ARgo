@@ -6,8 +6,8 @@ class Profile extends Component {
   render() {
     return (
         <View style={{ flex: 1 }}>
-          <Header headerText={'List'} />
-            <Text>Jizzys Profile</Text>
+          <Header headerText={'Profile'} />
+            <Text>Izzys Profile</Text>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <Image
                 style={{ width: 350, height: 350 }}
