@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Header } from '../common';
 
 class Map extends Component {
-  static navigationOptions = {
-    title: 'Map'
-  };
-
   render() {
     return (
-      <View>
-        <Text>Map</Text>
+      <View style={{ flex: 1 }}>
+        <Header headerText={'Map'} />
       </View>
     );
   }
