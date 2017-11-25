@@ -25,26 +25,29 @@ const RootsTab = TabNavigator({
   Profile: {
     screen: ProfileScreen,
     navigationOptions: {
-      header: null
-
+      header: null,
+      gesturesEnabled: false
     }
   },
   Map: {
     screen: MapScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false
     }
   },
   List: {
     screen: ListScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false
     }
   },
   More: {
     screen: MoreScreen,
     navigationOptions: {
-      header: null
+      header: null,
+      gesturesEnabled: false
     }
   }
 });
