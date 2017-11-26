@@ -1,24 +1,26 @@
 import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
 import { View } from 'react-native';
 import { CardSection, Button, Header } from '../common';
-
-// export const MoreNavigator = StackNavigator(
-//   rootstab: 'RootsTab',
-//   TermsOfService: 'TermsOfService'
-// );
 
 class More extends Component {
   pressedTerms = () => {
     this.props.navigation.navigate('TermsOfService');
   };
 
+  pressedHelp = () => {
+    this.props.navigation.navigate('HelpAndAbout');
+  }
+
+  pressedLogOut = () => {
+    this.props.navigation.navigate('LogOut');
+  }
+
   render() {
     return (
       <View>
         <Header headerText={'More'} />
         <CardSection>
-          <Button>
+          <Button onPress={this.pressedHelp}>
             Help And About
           </Button>
         </CardSection>
@@ -28,7 +30,7 @@ class More extends Component {
           </Button>
         </CardSection>
         <CardSection>
-          <Button>
+          <Button onPress={this.pressedLogOut}>
             Log Out
           </Button>
         </CardSection>
