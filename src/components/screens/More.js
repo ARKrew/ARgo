@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import { StackNavigator } from 'react-navigation';
 import { View } from 'react-native';
 import { CardSection, Button, Header } from '../common';
+
+// export const MoreNavigator = StackNavigator(
+//   rootstab: 'RootsTab',
+//   TermsOfService: 'TermsOfService'
+// );
 
 class More extends Component {
   pressedTerms = () => {
