@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Profile from './screens/Profile';
-import More from './screens/More';
+import MoreNav from './screens/MoreScreens/MoreNav';
 import Map from './screens/Map';
 import List from './screens/List';
 
@@ -19,7 +19,7 @@ const ListScreen = () => (
 );
 
 const MoreScreen = () => (
-  <More />
+  <MoreNav />
 );
 
 const RootsTab = TabNavigator({
