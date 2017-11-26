@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { Button, CardSection } from '../../common';
+import { Button, CardSection, Header } from '../../common';
 
 const LogOut = () => {
   return (
-    <View style={styles.ViewStyle}>
-      <Text>Are You Sure You Want To Log Out?</Text>
+    <View>
+      <Header headerText='Log Out' />
+      <Text style={styles.textStyle}>Are You Sure You Want To Log Out?</Text>
       <CardSection>
         <Button>Yes</Button>
       </CardSection>
@@ -17,7 +18,7 @@ const LogOut = () => {
 };
 
 const styles = {
-  ViewStyle: {
+  textStyle: {
     paddingTop: 30,
     justifyContent: 'center',
     alignItems: 'center',
