@@ -4,7 +4,7 @@ import { TabNavigator } from 'react-navigation';
 import Profile from './screens/Profile';
 import MoreNav from './screens/MoreScreens/MoreNav';
 import Map from './screens/Map';
-import List from './screens/List';
+import ListNav from './screens/ListScreens/ListNav';
 
 const ProfileScreen = () => (
   <Profile />
@@ -15,7 +15,7 @@ const MapScreen = () => (
 );
 
 const ListScreen = () => (
-  <List />
+  <ListNav />
 );
 
 const MoreScreen = () => (
