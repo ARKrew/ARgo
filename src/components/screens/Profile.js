@@ -1,25 +1,75 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
-import { Header } from '../common';
-import { fbImage } from '../LoginForm';
+import { View, Text, Image, Button, ActivityIndicator, StyleSheet } from 'react-native';
+import { Card, CardSection, Header } from '../common';
+import firebase from 'firebase';
+
+// const { width, height } = Dimensions.get("window");
+// const auth = firebaseApp.auth();
 
 class Profile extends Component {
+
+constructor(props) {
+    super(props);
+    this.state = {
+      uri: ''
+    };
+}
+
+componentDidMount() {
+    console.log(firebase.auth().currentUser);
+    this.fireBaseListener = firebase.auth().onAuthStateChanged(auth => {
+      if (auth) {
+        this.firebaseRef = firebase.database().ref('users');
+        this.firebaseRef.child(auth.uid).on('value', snap => {
+          const user = snap.val();
+          this.setState({ uri: user.dp });
+        });
+      }
+    });
+}
+
   render() {
-    return (
-        <View style={{ flex: 1 }}>
-          <Header headerText={'Profile'} />
-            <Text>Izzys Profile</Text>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    const headerName = firebase.auth().currentUser.displayName;
+    const joinDate = firebase.auth().currentUser.metadata.creationTime.split(' ').slice(1, -2).join(' ');
+      return (
+        <View>
+            <Header headerText={headerName} />
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
               <Image
-                style={{ width: 350, height: 350 }}
-                source={{
-                    uri: fbImage
-                }}
+                style={styles.image}
+                source={{ uri: this.state.uri }}
               />
+            <Text style={styles.text}>Member since: {joinDate}</Text>
             </View>
-        </View>
-    );
+            <View>
+            <Card>
+              <CardSection>
+                <Text style={styles.badgesText}>Badges</Text>
+              </CardSection>
+            </Card>
+            </View>
+
+          </View>
+      );
   }
 }
+
+const styles = StyleSheet.create({
+  text: {
+    marginTop: 5,
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  image: {
+    marginTop: 20,
+    width: 120,
+    height: 120,
+  },
+  badgesText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textShadowRadius: 2
+  }
+});
 
 export default Profile;
