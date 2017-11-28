@@ -1,52 +1,94 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Dimensions, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
-import { updateRegion } from '../../actions';
+import isEqual from 'lodash/isEqual';
+import { 
+  updateUserPosition, 
+  updateMapRegion, 
+  errorMessage 
+} from '../../actions';
+
+// Grab screen dimensions
+const screen = Dimensions.get('window');
+// Set zoom 
+const ASPECT_RATIO = screen.width / screen.height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class MapViews extends Component {
   constructor(props) {
     super(props);
-    watchId: null
+    this.watchId = null;
+    this.geolocationOptions = { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 };
   }
 
-  componentWillMount() {
-    this.watchId = navigator.geolocation.watchPosition(position => {
-      let region = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        latitudeDelta: 0.00922*1.5,
-        longitudeDelta: 0.00421*1.5
-      };
-
-      this.onRegionChange(region, position.coords.accuracy);
-    });
+  // Best place to fetch data, will fetch after initial render
+  componentDidMount() {
+    // Begin tracking location
+    this.watchLocation();
   }
 
-  onRegionChange(region, gpsAccuracy) {
-    this.props.updateRegion({ region, gpsAccuracy: gpsAccuracy || this.props.gpsAccuracy });
-  }
-
+  // Clear watch when component unmounts
   componentWillUnmount() {
-    navigator.geolocation.clearWatch(this.watchID);
+    if (this.watchID) {
+      navigator.geolocation.clearWatch(this.watchID);
+    }
+  }
+
+  // If user moves map around track where they're looking
+  onRegionChange(mapRegion) {
+    this.props.updateMapRegion({ mapRegion });
+  }
+
+  alertError() {
+    Alert.alert(
+      'Error Occurred',
+      this.props.error,
+      [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ],
+      { cancelable: false }
+    );
+  }
+
+  // Watch user's location
+  watchLocation() {
+    this.watchID = navigator.geolocation.watchPosition(position => {
+      const myLastPosition = this.props.userPosition;
+      const myPosition = 
+      { 
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude, 
+        latitudeDelta: LATITUDE_DELTA, 
+        longitudeDelta: LONGITUDE_DELTA 
+      };
+      if (!isEqual(myPosition, myLastPosition)) {
+        this.props.updateUserPosition({ userPosition: myPosition });
+      }
+    }, 
+    err => this.errorMessage({ error: err }), 
+    this.geolocationOptions);
   }
 
   render() {
-    console.log(this)
     return (
       <View style={styles.container}>
+      {/* Alert the user if there was an issue */}
+        {this.props.error && this.alertError()}
         <MapView
-          style={ styles.map }
-          region={this.props.region}
           showsUserLocation
-          showsMyLocationButton
-          showsCompass
-          onRegionChange={this.onRegionChange.bind(this)}
+          style={styles.map}
+          region={this.props.userPosition}
+          showsPointsOfInterest={false}
+          showsBuildings={false}
+          showsIndoor={false}
+          onRegionChangeComplete={this.onRegionChange.bind(this)}
         />
       </View>
-    )
+    );
   }
-};
+}
 
 const styles = {
   container: {
@@ -63,8 +105,13 @@ const styles = {
   }
 };
 
-const mapStateToProps = (state, hasOwnProps) => {
+const mapStateToProps = state => {
   return state.map;
-}
+};
 
-export default connect(mapStateToProps, { updateRegion })(MapViews);
+export default connect(mapStateToProps, 
+  { 
+    updateUserPosition, 
+    updateMapRegion, 
+    errorMessage 
+  })(MapViews);
