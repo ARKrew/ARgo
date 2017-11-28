@@ -79,10 +79,11 @@ class MapViews extends Component {
         <MapView
           showsUserLocation
           style={styles.map}
-          region={this.props.userPosition}
+          initialRegion={this.props.userPosition}
           showsPointsOfInterest={false}
           showsBuildings={false}
           showsIndoor={false}
+          onRegionChange={this.onRegionChange.bind(this)}
           onRegionChangeComplete={this.onRegionChange.bind(this)}
         />
       </View>
