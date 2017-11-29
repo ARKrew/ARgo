@@ -75,6 +75,9 @@ const RootsTab = TabNavigator({
     ),
     }
   }
+},
+{
+  lazy: true
 });
 
 const styles = StyleSheet.create({

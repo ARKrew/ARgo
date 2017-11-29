@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
 import { Header, Button, CardSection } from '../common';
 
 class List extends Component {
+  shouldComponentUpdate() {
+    if (this.props.currentRoute === 2) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
   pressedAR = () => {
     this.props.navigation.navigate('ARPortal');
   };
@@ -12,6 +22,7 @@ class List extends Component {
   };
 
   render() {
+    console.log('list')
     return (
       <View>
         <Header headerText={'List'} />
@@ -26,4 +37,6 @@ class List extends Component {
   }
 }
 
-export default List;
+const mapStateToProps = state => ({ currentRoute: state.nav.routes[1].index });
+
+export default connect(mapStateToProps)(List);

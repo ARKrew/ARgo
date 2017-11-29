@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { View, Text, Image, Button, ActivityIndicator, StyleSheet } from 'react-native';
 import { Card, CardSection, Header } from '../common';
 import firebase from 'firebase';
@@ -28,7 +29,17 @@ componentDidMount() {
     });
 }
 
+shouldComponentUpdate() {
+  if (this.props.currentRoute === 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
   render() {
+    console.log('profile')
     const headerName = firebase.auth().currentUser.displayName;
     const joinDate = firebase.auth().currentUser.metadata.creationTime.split(' ').slice(1, -2).join(' ');
       return (
@@ -72,4 +83,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Profile;
+const mapStateToProps = state => ({ currentRoute: state.nav.routes[1].index });
+
+export default connect(mapStateToProps)(Profile);
